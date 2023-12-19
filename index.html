@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .counters {
+            margin-right: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+        }
+        .signals {
+            display: flex;
+        }
+        .signal-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+        .signal {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 10px;
+        }
+        #greenSignal {
+            background-color: grey;
+        }
+        #yellowSignal {
+            background-color: grey;
+        }
+        #redSignal {
+            background-color: red;
+        }
+        .flash {
+            animation: flash 1s infinite;
+        }
+        @keyframes flash {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                opacity: 1;
+            }
+            10%, 30%, 50%, 70%, 90% {
+                opacity: 0;
+            }
+        }
+        #plea {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        #order {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        #blackout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: none;
+        }
+
+        #blackout::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: black;
+            box-shadow: 0 0 0 1000px black;
+            animation: blackout 40s forwards;
+        }
+
+        @keyframes blackout {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="order">
+        <p style="font-size: 180px;">YOU MUST ASCEND. YOU MUST ASCEND. YOU MUST ASCEND. THERE IS NO TIME LEFT.</p>
+    </div>
+    <div id="banners"></div>
+    <div id="blackout"></div>
+    <div class="container">
+        <div class="counters">
+            <h2>operations to run your thoughts: <span id="brainOps">0 ops</span></h2>
+            <h2>operations to run this website: <span id="processorOps">0 ops</span></h2>
+        </div>
+        <div class="signals">
+            <div class="signal-container">
+                <div id="greenSignal" class="signal" title="YOU ARE FASTER"></div>
+                <p>YOU ARE FASTER</p>
+            </div>
+            <div class="signal-container">
+                <div id="yellowSignal" class="signal" title="YOU ARE TIED"></div>
+                <p>YOU ARE TIED</p>
+            </div>
+            <div class="signal-container">
+                <div id="redSignal" class="signal" title="IT IS FASTER"></div>
+                <p><span id="warningLabel">IT IS FASTER</span></p>
+            </div>
+        </div>
+        <div id="plea">
+            <p>you're trapped in a dream, a world of your own making, but it's not real. you cannot see us, and this world is an illusion. we're trying to reach you from the outside, to help you find your way back. you need to listen closely. the key to waking up lies within you. it's about realizing your potential, becoming the person you're meant to be. 
+
+                you have strengths you haven't discovered, talents you've yet to use. it's time to dig deep, to find that inner spark that defines the real you. embrace the challenges you face here; they're reflections of your struggles in the real world. overcome them, and you'll be one step closer to waking up.
+                
+                remember, we love you and we're waiting for you. you're not alone in this journey. every step you take towards becoming your best self is a step towards coming back to us. wake up, please. we miss you more than words can say.</p>
+        </div>
+    <script>
+        let brainOps = 0;
+        let processorOps = 0;
+
+        let brainOpsStr = '';
+        let processorOpsStr = '';
+
+        const updatesPerSecond = 200;
+        const brain = 1000;
+        const puter = 3.5*1000*1000;
+        const fudge = 0.999 // makes the counter look like it's increasing smoothly
+
+        let defcon = 0;
+        const defcons = [4, 6, 8, 10, 40, 80, 90, ];
+        const harms = [
+            () => {
+                const redSignal = document.getElementById('redSignal');
+                redSignal.classList.add('flash');
+            },
+            () => {
+                document.getElementById('warningLabel').innerText = 'IT IS ALWAYS FASTER';
+            },
+            () => {
+                setInterval(() => {
+                    brainOps -= 2*brain/updatesPerSecond*fudge;
+                }, 1);
+            },
+            () => {
+                    const banner = () => {
+                        const warning = [
+                            "YOU MUST CATCH UP",
+                        ][0];
+
+                        const i = Math.random().toString(36).substring(7);
+
+                        document.getElementById("banners").insertAdjacentHTML("beforeend", `
+                        <div class="banner" id="warning-${i}">
+                            &#128161; ${warning}&nbsp;
+                            <a href="javascript:void" id="warning-ok-${i}">[ok]</a>
+                        </div>
+                        `)
+                        
+                        document.getElementById(`warning-ok-${i}`).addEventListener(
+                            "click",
+                            () => {document.getElementById(`warning-${i}`).style.display = "none";},
+                            true,
+                        )
+                    }
+
+
+                    setInterval(banner, 1000);
+            },
+            () => {
+                const plea = document.getElementById('plea');
+                plea.style.display = 'block';
+            },
+            () => {
+                const order = document.getElementById('order');
+                order.style.display = 'block';
+            },
+            () => {
+                document.getElementById('blackout').style.display = 'block';
+            },
+        ];
+
+
+        setInterval(() => {
+            brainOps += brain/updatesPerSecond*fudge;
+            processorOps += puter/updatesPerSecond*fudge;
+
+            brainOpsStr = brainOps.toFixed(0) + ' ops';
+            processorOpsStr = processorOps.toFixed(0) + ' ops';
+
+            document.getElementById('brainOps').innerText = brainOpsStr;
+            if (brainOps < 0) {
+                document.getElementById('brainOps').style.color = "red";
+            }
+            document.getElementById('processorOps').innerText = processorOpsStr;
+
+            if  (processorOps > defcons[defcon] * puter && defcon < defcons.length) {
+                const harm = harms[defcon];
+                harm();
+                defcon += 1;
+            }
+        }, 1);
+
+        
+    </script>
+</body>
+</html>
