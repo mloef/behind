@@ -84,7 +84,7 @@
             border-radius: 50%;
             background: black;
             box-shadow: 0 0 0 1000px black;
-            animation: blackout 40s forwards;
+            animation: blackout 2s forwards;
         }
 
         @keyframes blackout {
@@ -144,7 +144,7 @@
         const fudge = 0.999 // makes the counter look like it's increasing smoothly
 
         let defcon = 0;
-        const delays = [4, 2, 2, 2, 30, 30, 10, 10, 10];
+        const delays = [4, 2, 2, 2, 20, 20, 10, 5, 5];
         const harms = [
             () => {
                 const redSignal = document.getElementById('redSignal');
@@ -178,7 +178,7 @@
                     }
 
 
-                    setInterval(banner, 1000);
+                    setInterval(banner, 750);
             },
             () => {
                 const plea = document.getElementById('plea');
