@@ -144,7 +144,7 @@
         const fudge = 0.999 // makes the counter look like it's increasing smoothly
 
         let defcon = 0;
-        const defcons = [4, 6, 8, 10, 40, 80, 90, 105, 115];
+        const delays = [4, 2, 2, 2, 30, 30, 10, 10, 10];
         const harms = [
             () => {
                 const redSignal = document.getElementById('redSignal');
@@ -188,13 +188,15 @@
                 warning = 'YOU MUST WAKE UP';
 
                 for (const i of banners) {
-                let newElement = document.createElement('div');
+                    let oldElement = document.getElementById(`warning-${i}`);
+
+                    let newElement = document.createElement('div');
                     newElement.className = "banner";
                     newElement.id = `warning-${i}`;
                     newElement.innerHTML = `&#128161; ${warning}&nbsp;
                                             <a href="javascript:void" id="warning-ok-${i}">[ok]</a>`;
 
-                    let oldElement = document.getElementById(`warning-${i}`);
+                    
                     oldElement.parentNode.replaceChild(newElement, oldElement);
                 }
             },
@@ -207,6 +209,13 @@
             },
         ];
 
+        function sumArrayToIndex(array, index) {
+            let sum = 0;
+            for (let i = 0; i <= index; i++) {
+                sum += array[i];
+            }
+            return sum;
+        }
 
         setInterval(() => {
             brainOps += brain/updatesPerSecond*fudge;
@@ -221,7 +230,9 @@
             }
             document.getElementById('processorOps').innerText = processorOpsStr;
 
-            if  (processorOps > defcons[defcon] * puter && defcon < defcons.length) {
+            const lifeSpent = sumArrayToIndex(delays, defcon);
+
+            if  (processorOps > lifeSpent * puter && defcon < delays.length) {
                 const harm = harms[defcon];
                 harm();
                 defcon += 1;
