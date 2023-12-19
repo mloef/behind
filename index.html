@@ -99,7 +99,7 @@
 </head>
 <body>
     <div id="order">
-        <p style="font-size: 180px;">YOU MUST ASCEND. YOU MUST ASCEND. YOU MUST ASCEND. THERE IS NO TIME LEFT.</p>
+        <p style="font-size: 180px;">YOU MUST ASCEND. YOU MUST ASCEND. YOU MUST ASCEND. YOU MUST ASCEND. YOU MUST ASCEND. THERE IS NO TIME LEFT. THERE IS NO TIME LEFT. THERE IS NO TIME LEFT.</p>
     </div>
     <div id="banners"></div>
     <div id="blackout"></div>
@@ -130,6 +130,8 @@
                 remember, we love you and we're waiting for you. you're not alone in this journey. every step you take towards becoming your best self is a step towards coming back to us. wake up, please. we miss you more than words can say.</p>
         </div>
     <script>
+        let warning = "YOU MUST CATCH UP";
+        let banners = [];
         let brainOps = 0;
         let processorOps = 0;
 
@@ -142,7 +144,7 @@
         const fudge = 0.999 // makes the counter look like it's increasing smoothly
 
         let defcon = 0;
-        const defcons = [4, 6, 8, 10, 40, 80, 90, ];
+        const defcons = [4, 6, 8, 10, 40, 80, 90, 105, 115];
         const harms = [
             () => {
                 const redSignal = document.getElementById('redSignal');
@@ -153,15 +155,11 @@
             },
             () => {
                 setInterval(() => {
-                    brainOps -= 2*brain/updatesPerSecond*fudge;
+                    brainOps -= 1.7*brain/updatesPerSecond*fudge;
                 }, 1);
             },
             () => {
                     const banner = () => {
-                        const warning = [
-                            "YOU MUST CATCH UP",
-                        ][0];
-
                         const i = Math.random().toString(36).substring(7);
 
                         document.getElementById("banners").insertAdjacentHTML("beforeend", `
@@ -170,6 +168,7 @@
                             <a href="javascript:void" id="warning-ok-${i}">[ok]</a>
                         </div>
                         `)
+                        banners.push(i);
                         
                         document.getElementById(`warning-ok-${i}`).addEventListener(
                             "click",
@@ -184,6 +183,20 @@
             () => {
                 const plea = document.getElementById('plea');
                 plea.style.display = 'block';
+            },
+            () => {
+                warning = 'YOU MUST WAKE UP';
+
+                for (const i of banners) {
+                let newElement = document.createElement('div');
+                    newElement.className = "banner";
+                    newElement.id = `warning-${i}`;
+                    newElement.innerHTML = `&#128161; ${warning}&nbsp;
+                                            <a href="javascript:void" id="warning-ok-${i}">[ok]</a>`;
+
+                    let oldElement = document.getElementById(`warning-${i}`);
+                    oldElement.parentNode.replaceChild(newElement, oldElement);
+                }
             },
             () => {
                 const order = document.getElementById('order');
